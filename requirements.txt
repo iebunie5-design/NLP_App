@@ -7,5 +7,4 @@ wordcloud>=1.9.0
 feedparser>=6.0.0
 beautifulsoup4>=4.12.0
 requests>=2.31.0
-konlpy
-JPype1
+kiwipiepy
