@@ -313,10 +313,28 @@ with tab3:
 if show_df:
     st.markdown("---")
     st.subheader(f"'{selected}' 원본 기사 (최근 20건)")
-    show_cols = [c for c in ["date", "title", "description", "source", "link"]
-                 if c in df_news.columns]
-    preview = df_news[df_news[topic_col] == selected][show_cols].head(20)
-    st.dataframe(preview, use_container_width=True)
+
+    preview = df_news[df_news[topic_col] == selected].head(20)
+
+    for _, row in preview.iterrows():
+        title = row.get("title", "제목 없음")
+        desc  = row.get("description", "")[:100]
+        link  = row.get("link", "")
+        date  = row.get("date", "")
+        source = row.get("source", "")
+
+        # 제목을 클릭 가능한 링크로 표시
+        if link:
+            st.markdown(
+                f"**[{title}]({link})**  \n"
+                f"<span style='color:gray;font-size:12px'>{date} · {source}</span>  \n"
+                f"{desc}...",
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(f"**{title}**  \n{desc}...")
+
+        st.divider()
 
 st.markdown("---")
 st.caption(
