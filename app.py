@@ -4,7 +4,6 @@ collect_news.py 로 수집한 news_data.csv를 실시간으로 분석합니다.
 """
 
 import re
-import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -65,17 +64,12 @@ with col_h2:
     if st.button("🔄 뉴스 새로 수집", use_container_width=True):
         with st.spinner("뉴스 수집 중... (30초~1분 소요)"):
             try:
-                result = subprocess.run(
-                    ["python", "collect_news.py"],
-                    capture_output=True, text=True, timeout=120
-                )
-                if result.returncode == 0:
-                    st.success("수집 완료! 페이지를 새로고침해주세요.")
-                    st.cache_data.clear()
-                else:
-                    st.error(f"수집 오류: {result.stderr[:200]}")
+                from collect_news import main as collect_main
+                collect_main(reset=False, fetch_body=False)
+                st.success("수집 완료! 페이지를 새로고침해주세요.")
+                st.cache_data.clear()
             except Exception as e:
-                st.error(f"실행 오류: {e}")
+                st.error(f"수집 오류: {e}")
 
 
 # ── 데이터 로드 ────────────────────────────────────────────
